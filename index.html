@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; form-action 'none'; base-uri 'self'; frame-ancestors 'none'; object-src 'none';">
+  <title>Party Invitation</title>
+  <link rel="stylesheet" href="css/style.css">
+  <!--
+    Security note: no sensitive data lives in this file.
+    All event details (address, phone, invitation image) are served
+    by the Google Apps Script backend only after token validation.
+  -->
+</head>
+<body>
+
+  <!-- ========================================================
+       Loading State
+       ======================================================== -->
+  <div id="loading" class="state">
+    <div class="spinner"></div>
+    <p>Loading your invitation&hellip;</p>
+  </div>
+
+  <!-- ========================================================
+       Error State
+       ======================================================== -->
+  <div id="error" class="state" style="display:none;">
+    <div class="card" style="border-color:#e74c3c; text-align:center;">
+      <h1 style="color:#c0392b;">Invalid Invitation</h1>
+      <p id="error-message">This invitation link is not valid. Please check the link you received.</p>
+      <p style="margin-top:0.75rem; color:#888; font-size:0.9rem;">
+        If you believe this is an error, please contact the host.
+      </p>
+    </div>
+  </div>
+
+  <!-- ========================================================
+       Invitation State (shown after successful token validation)
+       ======================================================== -->
+  <div id="invitation" class="state" style="display:none;">
+
+    <!-- Invitation image (rendered from base64, only after token check) -->
+    <div class="hero">
+      <img id="invite-image"
+           class="invite-image"
+           src=""
+           alt="Party Invitation"
+           style="display:block;">
+    </div>
+
+    <!-- Personalized greeting -->
+    <div class="card greeting-card">
+      <h1 id="guest-name">Guest</h1>
+      <p id="plus-one" style="display:none;">
+        You are invited together with <span id="plus-one-name"></span>
+      </p>
+    </div>
+
+    <!-- Event details (populated after token validation) -->
+    <div class="card event-details-card">
+      <h2>Event Details</h2>
+      <p><strong>Event:</strong> <span id="event-name"></span></p>
+      <p><strong>Date:</strong> <span id="event-date"></span></p>
+      <p><strong>Time:</strong> <span id="event-time"></span></p>
+      <p><strong>Address:</strong> <span id="event-address"></span></p>
+      <p><strong>Host Phone:</strong> <span id="event-phone"></span></p>
+      <p id="event-message" style="display:none; margin-top:0.75rem; padding-top:0.75rem; border-top:1px solid #e0d0ee;"></p>
+    </div>
+
+    <!-- RSVP Form -->
+    <div class="card rsvp-card">
+      <h2>RSVP</h2>
+      <form id="rsvp-form">
+        <div class="form-group">
+          <label>Will you attend?</label>
+          <div class="radio-group">
+            <label class="radio-label">
+              <input type="radio" name="attending" value="yes" required>
+              Joyfully Accept
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="attending" value="no" required>
+              Regretfully Decline
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" id="meal-section" style="display:none;">
+          <label>Meal Preference</label>
+          <select name="meal_preference">
+            <option value="">-- Please select --</option>
+            <option value="meat">Meat</option>
+            <option value="veggie">Vegetarian</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="dietary-section" style="display:none;">
+          <label>Dietary Restrictions</label>
+          <textarea name="dietary_restrictions" rows="2"
+                    placeholder="e.g., gluten-free, nut allergy, dairy-free&hellip;"></textarea>
+        </div>
+
+        <div class="form-group" id="notes-section">
+          <label>Notes for the Host</label>
+          <textarea name="notes" rows="2"
+                    placeholder="Anything you'd like to let us know&hellip;"></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary">Submit RSVP</button>
+      </form>
+    </div>
+
+    <!-- Confirmation message (shown after successful RSVP submission) -->
+    <div id="confirmation" class="card" style="display:none; text-align:center;">
+      <h2 style="color:#2e7d32;">Thank You!</h2>
+      <p id="confirmation-text">Your RSVP has been received.</p>
+    </div>
+
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
